@@ -1,11 +1,10 @@
-这个项目是一个简易版的 Spring 框架实现，具备基本的 IOC 容器、依赖注入（DI）、Bean 生命周期管理以及扩展机制（如 [BeanPostProcessor](file://D:\java_Study\spring_study\mini-spring\src\main\java\com\han\spring\BeanPostProcessor.java#L8-L17)）。以下是项目的功能和关键模块总结：
-
+这个项目是一个简易版的 Spring 框架实现，具备基本的 IOC 容器、依赖注入（DI）、Bean 生命周期管理以及扩展机制（如 `BeanPostProcessor`）
 ---
 
 ### 1. **IOC 容器核心**
 - **ApplicationContext 类**：作为整个容器的核心，负责初始化上下文、扫描包、创建 Bean 并管理其生命周期。
 - **单例池 ioc**：使用 `Map<String, Object>` 存储所有已经创建完成的 Bean 实例。
-- **beanDefinitionMap**：存储每个 Bean 的定义信息（[BeanDefinition](file://D:\java_Study\spring_study\mini-spring\src\main\java\com\han\spring\BeanDefinition.java#L11-L75)），包括类名、构造方法、注解信息等。
+- **beanDefinitionMap**：存储每个 Bean 的定义信息（`BeanDefinition`），包括类名、构造方法、注解信息等。
 
 ---
 
@@ -13,32 +12,32 @@
 - **BeanDefinition 类**：描述一个 Bean 的元数据，包含：
     - bean 名称
     - 构造函数
-    - [@Autowired](file://D:\java_Study\spring_study\mini-spring\src\main\java\com\han\spring\sub\Autowired.java#L13-L16) 字段列表
-    - [@PostConstruct](file://D:\java_Study\spring_study\mini-spring\src\main\java\com\han\spring\sub\PostConstruct.java#L13-L16) 方法
+    - `@Autowired` 字段列表
+    - `@PostConstruct` 方法
 
 - **createBean / doCreateBean 方法**：负责创建 Bean 实例，并处理依赖注入和初始化逻辑。
 
 ---
 
 ### 3. **依赖注入（DI）**
-- **autowiredBean 方法**：根据 [BeanDefinition](file://D:\java_Study\spring_study\mini-spring\src\main\java\com\han\spring\BeanDefinition.java#L11-L75) 中收集的 [@Autowired](file://D:\java_Study\spring_study\mini-spring\src\main\java\com\han\spring\sub\Autowired.java#L13-L16) 字段进行依赖注入。
+- **autowiredBean 方法**：根据 `BeanDefinition` 中收集的 `@Autowired`字段进行依赖注入。
 - 使用反射将依赖对象赋值给字段。
 
 ---
 
 ### 4. **Bean 生命周期管理**
-- 支持 [@PostConstruct](file://D:\java_Study\spring_study\mini-spring\src\main\java\com\han\spring\sub\PostConstruct.java#L13-L16) 注解标注的方法，在 Bean 初始化时自动调用。
-- 提供 [BeanPostProcessor](file://D:\java_Study\spring_study\mini-spring\src\main\java\com\han\spring\BeanPostProcessor.java#L8-L17) 接口用于在 Bean 初始化前后插入自定义逻辑。
-    - [beforeInitialization()](file://D:\java_Study\spring_study\mini-spring\src\main\java\com\han\spring\BeanPostProcessor.java#L10-L12)：初始化前拦截
-    - [afterInitialization()](file://D:\java_Study\spring_study\mini-spring\src\main\java\com\han\spring\BeanPostProcessor.java#L14-L16)：初始化后拦截
+- 支持 `@PostConstruct` 注解标注的方法，在 Bean 初始化时自动调用。
+- 提供 `BeanPostProcessor` 接口用于在 Bean 初始化前后插入自定义逻辑。
+    - `beforeInitialization()`：初始化前拦截
+    - `afterInitialization()`：初始化后拦截
 
-示例实现：[MyBeanPostProcessor](file://D:\java_Study\spring_study\mini-spring\src\main\java\com\han\spring\MyBeanPostProcessor.java#L8-L22) 打印初始化阶段日志。
+示例实现：`MyBeanPostProcessor` 打印初始化阶段日志。
 
 ---
 
 ### 5. **组件扫描与自动注册**
-- **scanPackage 方法**：递归扫描指定包路径下的 [.class](file://D:\java_Study\spring_study\mini-spring\target\classes\com\han\spring\Main.class) 文件并加载为 Class 对象。
-- 根据 [@Component](file://D:\java_Study\spring_study\mini-spring\src\main\java\com\han\spring\Component.java#L7-L11) 注解判断是否需要注册为 Bean。
+- **scanPackage 方法**：递归扫描指定包路径下的 `.class` 文件并加载为 Class 对象。
+- 根据 `@Component` 注解判断是否需要注册为 Bean。
 - 包名转换为路径格式，支持跨平台兼容性处理。
 
 ---
@@ -95,7 +94,7 @@ ApplicationContext
 | IOC 容器 | ✅ 已实现 |
 | 依赖注入（@Autowired） | ✅ 已实现 |
 | Bean 生命周期管理（@PostConstruct） | ✅ 已实现 |
-| 循环依赖处理 | ✅ 使用 [loadingIoc](file://D:\java_Study\spring_study\mini-spring\src\main\java\com\han\spring\ApplicationContext.java#L31-L31) 做提前曝光（模拟二级缓存） |
+| 循环依赖处理 | ✅ 使用 `loadingIoc` 做提前曝光（模拟二级缓存） |
 | AOP 支持 | ❌ 尚未实现 |
 | 三级缓存 | ❌ 尚未实现 |
 | Spring MVC 功能 | ❌ 尚未实现 |
